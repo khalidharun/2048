@@ -10,6 +10,12 @@ def main():
     running = True
     
     while running:
+        current_time = pygame.time.get_ticks()
+        
+        # Clear message after 2 seconds
+        if game.current_message and current_time - game.message_timer > 2000:
+            game.current_message = None
+        
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
@@ -26,14 +32,16 @@ def main():
                         # Check achievements/win condition after valid move
                         if any(16 in row for row in game.matrix) and not game.has_shown_16:
                             game.has_shown_16 = True
-                            print("Achievement! You've reached 16!")
+                            game.current_message = "Achievement! You've reached 16!"
+                            game.message_timer = current_time
                         
                         if game.check_win():
-                            print("Congratulations! You've won!")
+                            game.current_message = "Congratulations! You've won!"
+                            game.message_timer = current_time
                         
                         if game.is_game_over():
-                            print(f"Game Over! Final Score: {game.score}")
-                            running = False
+                            game.current_message = f"Game Over! Final Score: {game.score}"
+                            game.message_timer = current_time
         
         renderer.draw_game(game)
         clock.tick(60)

@@ -8,6 +8,8 @@ class Game2048:
         self.game_over = False
         self.won = False
         self.has_shown_16 = False
+        self.current_message = None  # Track current message
+        self.message_timer = 0  # Control message duration
         self.init_game()
 
     def init_game(self):

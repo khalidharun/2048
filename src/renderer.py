@@ -9,6 +9,7 @@ class GameRenderer:
         self.screen = pygame.display.set_mode((WINDOW_SIZE, WINDOW_SIZE))
         pygame.display.set_caption("2048")
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE)
+        self.message_font = pygame.font.SysFont(FONT_NAME, FONT_SIZE * 2)  # Larger font for messages
         
     def draw_game(self, game: Game2048):
         self.screen.fill(pygame.Color(COLORS['background']))
@@ -37,5 +38,18 @@ class GameRenderer:
         # Draw score
         score_text = self.font.render(f"Score: {game.score}", True, pygame.Color(TEXT_COLORS['default']))
         self.screen.blit(score_text, (10, WINDOW_SIZE - 40))
+        
+        # Draw message if exists
+        if game.current_message:
+            # Semi-transparent overlay
+            overlay = pygame.Surface((WINDOW_SIZE, WINDOW_SIZE))
+            overlay.fill((0, 0, 0))
+            overlay.set_alpha(128)
+            self.screen.blit(overlay, (0, 0))
+            
+            # Message text
+            message_text = self.message_font.render(game.current_message, True, pygame.Color(TEXT_COLORS['default']))
+            message_rect = message_text.get_rect(center=(WINDOW_SIZE // 2, WINDOW_SIZE // 2))
+            self.screen.blit(message_text, message_rect)
         
         pygame.display.flip()
