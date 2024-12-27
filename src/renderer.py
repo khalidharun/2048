@@ -11,7 +11,7 @@ class GameRenderer:
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE)
         self.title_font = pygame.font.SysFont(FONT_NAME, TITLE_FONT_SIZE, bold=True)
         self.score_font = pygame.font.SysFont(FONT_NAME, SCORE_FONT_SIZE)
-        self.message_font = pygame.font.SysFont(FONT_NAME, int(FONT_SIZE * 1.5))  # Slightly smaller messages
+        self.message_font = pygame.font.SysFont(FONT_NAME, MESSAGE_FONT_SIZE)
         self.close_button_size = 20
         self.close_button_padding = 5
         
@@ -56,7 +56,7 @@ class GameRenderer:
             message_area = pygame.Surface((WINDOW_SIZE, MESSAGE_AREA_HEIGHT))
             message_area.fill((0, 0, 0))
             message_area.set_alpha(180)
-            message_y = GAME_AREA_TOP + (WINDOW_SIZE - MESSAGE_AREA_HEIGHT) // 2
+            message_y = TITLE_HEIGHT + 10  # Position message area right after the title
             self.screen.blit(message_area, (0, message_y))
             
             # Draw close button

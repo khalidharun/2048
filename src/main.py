@@ -27,10 +27,6 @@ def main():
                 if event.key in key_map:
                     if game.handle_input(key_map[event.key]):
                         # Check achievements/win condition after valid move
-                        if any(16 in row for row in game.matrix) and not game.has_shown_16:
-                            game.has_shown_16 = True
-                            game.current_message = "Achievement! You've reached 16!"
-                        
                         if game.check_win():
                             game.current_message = "Congratulations! You've won!"
                         

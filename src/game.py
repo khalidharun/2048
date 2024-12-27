@@ -7,7 +7,7 @@ class Game2048:
         self.score = 0
         self.game_over = False
         self.won = False
-        self.has_shown_16 = False
+        self.highest_achieved = 8  # Track highest power of 2 achieved
         self.current_message = None  # Track current message
         self.close_button_rect = None  # Store the close button rectangle
         self.init_game()
@@ -39,8 +39,15 @@ class Game2048:
                 if self.matrix[i][j] != 0 and self.matrix[i][j] == self.matrix[i][j + 1]:
                     self.matrix[i][j] *= 2
                     self.score += self.matrix[i][j]
+                    current_value = self.matrix[i][j]
                     self.matrix[i][j + 1] = 0
-                    if self.matrix[i][j] == 2048 and not self.won:
+                    
+                    # Check for new power of 2 achievement
+                    if current_value > self.highest_achieved and bin(current_value).count('1') == 1:
+                        self.highest_achieved = current_value
+                        self.current_message = f"Achievement! You've reached {current_value}!"
+                    
+                    if current_value == 2048 and not self.won:
                         self.won = True
 
     def reverse(self) -> None:
