@@ -1,50 +1,18 @@
-import tkinter as tk
-from tkinter import messagebox
 import random
 from typing import List, Optional
 
 class Game2048:
     def __init__(self):
-        self.window = tk.Tk()
-        self.window.title("2048")
-        self.grid_cells: List[List[tk.Label]] = []
-        self.matrix: List[List[int]] = []
+        self.matrix: List[List[int]] = [[0] * 4 for _ in range(4)]
         self.score = 0
         self.game_over = False
         self.won = False
         self.has_shown_16 = False
-        self.init_grid()
-        self.init_matrix()
-        self.bind_keys()
+        self.init_game()
 
-    def init_grid(self):
-        background = tk.Frame(
-            self.window,
-            bg='#92877d',
-            width=400,
-            height=400
-        )
-        background.grid()
-
-        for i in range(4):
-            grid_row = []
-            for j in range(4):
-                cell = tk.Label(
-                    background,
-                    bg='#9e948a',
-                    font=('Arial', 40, 'bold'),
-                    width=4,
-                    height=2
-                )
-                cell.grid(row=i, column=j, padx=5, pady=5)
-                grid_row.append(cell)
-            self.grid_cells.append(grid_row)
-
-    def init_matrix(self):
-        self.matrix = [[0] * 4 for _ in range(4)]
+    def init_game(self):
         self.add_new_tile()
         self.add_new_tile()
-        self.update_grid_cells()
 
     def add_new_tile(self) -> None:
         empty_cells = [(i, j) for i in range(4) for j in range(4) if self.matrix[i][j] == 0]
@@ -52,22 +20,6 @@ class Game2048:
             i, j = random.choice(empty_cells)
             self.matrix[i][j] = 2 if random.random() < 0.9 else 4
 
-    def update_grid_cells(self):
-        for i in range(4):
-            for j in range(4):
-                new_number = self.matrix[i][j]
-                if new_number == 0:
-                    self.grid_cells[i][j].configure(text="", bg='#9e948a')
-                else:
-                    self.grid_cells[i][j].configure(
-                        text=str(new_number),
-                        bg=self.get_cell_color(new_number),
-                        fg=self.get_text_color(new_number)
-                    )
-                    if new_number == 16 and not self.has_shown_16:
-                        messagebox.showinfo("Achievement!", "Congratulations! You've reached 16!")
-                        self.has_shown_16 = True
-        self.window.update_idletasks()
 
     def stack(self) -> None:
         new_matrix = [[0] * 4 for _ in range(4)]
@@ -161,33 +113,20 @@ class Game2048:
             self.game_over = True
             messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
-    def bind_keys(self) -> None:
-        self.window.bind('<Left>', lambda event: self.move_left())
-        self.window.bind('<Right>', lambda event: self.move_right())
-        self.window.bind('<Up>', lambda event: self.move_up())
-        self.window.bind('<Down>', lambda event: self.move_down())
-
-    @staticmethod
-    def get_cell_color(number: int) -> str:
-        cell_colors = {
-            0: '#9e948a',
-            2: '#eee4da',
-            4: '#ede0c8',
-            8: '#f2b179',
-            16: '#f59563',
-            32: '#f67c5f',
-            64: '#f65e3b',
-            128: '#edcf72',
-            256: '#edcc61',
-            512: '#edc850',
-            1024: '#edc53f',
-            2048: '#edc22e'
-        }
-        return cell_colors.get(number, '#ff0000')
-
-    @staticmethod
-    def get_text_color(number: int) -> str:
-        return '#776e65' if number <= 4 else '#f9f6f2'
+    def handle_input(self, event_key: str) -> bool:
+        """Returns True if the move was valid and changed the board"""
+        old_matrix = [row[:] for row in self.matrix]
+        
+        if event_key == 'LEFT':
+            self.move_left()
+        elif event_key == 'RIGHT':
+            self.move_right()
+        elif event_key == 'UP':
+            self.move_up()
+        elif event_key == 'DOWN':
+            self.move_down()
+            
+        return self.matrix != old_matrix
 
     def has_valid_moves(self) -> bool:
         """Check if any valid moves remain"""
