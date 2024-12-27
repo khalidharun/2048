@@ -114,9 +114,18 @@ class Game2048:
             messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def move_right(self) -> None:
+        old_matrix = [row[:] for row in self.matrix]
         self.reverse()
-        self.move_left()
+        self.stack()
+        self.combine()
+        self.stack()
         self.reverse()
+        if self.matrix != old_matrix:
+            self.add_new_tile()
+        self.update_grid_cells()
+        if not self.has_valid_moves() and not self.game_over:
+            self.game_over = True
+            messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def move_up(self) -> None:
         self.transpose()
