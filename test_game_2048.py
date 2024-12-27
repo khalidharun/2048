@@ -67,39 +67,102 @@ def test_movement_mechanics(game):
     assert game.matrix == original, "Board changed when no valid moves possible"
 
 def test_directional_movement(game):
-    """Test specific behaviors for each direction"""
+    """Test all directional movements thoroughly"""
     
-    # Test up movement
+    def assert_matrix_equal(actual, expected, message):
+        assert actual == expected, f"{message}\nExpected:\n{expected}\nGot:\n{actual}"
+    
+    # Test LEFT movement
     game.matrix = [
-        [0, 0, 0, 0],
-        [2, 0, 0, 0],
-        [2, 0, 0, 0],
-        [4, 0, 0, 0]
+        [0, 2, 2, 4],
+        [0, 2, 0, 2],
+        [2, 0, 2, 0],
+        [4, 0, 0, 4]
     ]
-    game.move_up()
-    assert game.matrix[0][0] == 4, "Up movement failed to merge"
-    assert game.matrix[1][0] == 4, "Up movement failed to stack"
-
-    # Test down movement
-    game.matrix = [
-        [2, 0, 0, 0],
-        [2, 0, 0, 0],
+    expected_left = [
+        [4, 4, 0, 0],
         [4, 0, 0, 0],
-        [0, 0, 0, 0]
+        [4, 0, 0, 0],
+        [8, 0, 0, 0]
     ]
-    game.move_down()
-    assert game.matrix[3][0] == 4, "Down movement failed to merge"
-    assert game.matrix[2][0] == 4, "Down movement failed to stack"
+    game.move_left()
+    assert_matrix_equal(game.matrix, expected_left, "Left movement failed")
 
-    # Test right movement with blocking
+    # Test RIGHT movement
     game.matrix = [
-        [2, 2, 2, 2],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0],
-        [0, 0, 0, 0]
+        [4, 2, 2, 0],
+        [2, 0, 2, 0],
+        [0, 2, 0, 2],
+        [4, 0, 0, 4]
+    ]
+    expected_right = [
+        [0, 0, 4, 4],
+        [0, 0, 0, 4],
+        [0, 0, 0, 4],
+        [0, 0, 0, 8]
     ]
     game.move_right()
-    assert game.matrix[0][2:] == [4, 4], "Right movement failed to merge correctly"
+    assert_matrix_equal(game.matrix, expected_right, "Right movement failed")
+
+    # Test UP movement
+    game.matrix = [
+        [0, 2, 4, 2],
+        [0, 2, 4, 2],
+        [2, 0, 0, 4],
+        [2, 4, 0, 4]
+    ]
+    expected_up = [
+        [4, 8, 8, 2],
+        [0, 0, 0, 8],
+        [0, 0, 0, 2],
+        [0, 0, 0, 0]
+    ]
+    game.move_up()
+    assert_matrix_equal(game.matrix, expected_up, "Up movement failed")
+
+    # Test DOWN movement
+    game.matrix = [
+        [2, 4, 0, 4],
+        [2, 0, 0, 4],
+        [0, 2, 4, 2],
+        [0, 2, 4, 2]
+    ]
+    expected_down = [
+        [0, 0, 0, 0],
+        [0, 0, 0, 2],
+        [0, 0, 0, 8],
+        [4, 8, 8, 2]
+    ]
+    game.move_down()
+    assert_matrix_equal(game.matrix, expected_down, "Down movement failed")
+
+    # Test complex scenarios
+    # Test merging prevention after one merge
+    game.matrix = [
+        [2, 2, 2, 2],
+        [4, 4, 4, 4],
+        [8, 8, 8, 8],
+        [16, 16, 16, 16]
+    ]
+    expected_right = [
+        [0, 0, 4, 4],
+        [0, 0, 8, 8],
+        [0, 0, 16, 16],
+        [0, 0, 32, 32]
+    ]
+    game.move_right()
+    assert_matrix_equal(game.matrix, expected_right, "Complex right movement failed")
+
+    # Test no movement when already aligned
+    game.matrix = [
+        [0, 0, 2, 4],
+        [0, 0, 4, 8],
+        [0, 0, 8, 16],
+        [0, 0, 16, 32]
+    ]
+    expected_no_change = [row[:] for row in game.matrix]
+    game.move_right()
+    assert_matrix_equal(game.matrix, expected_no_change, "Unnecessary movement occurred")
 
 def test_movement_edge_cases(game):
     """Test edge cases in movement mechanics"""
