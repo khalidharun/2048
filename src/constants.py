@@ -1,7 +1,8 @@
 # Window settings
 WINDOW_SIZE = 600
 WINDOW_HEIGHT = 700  # Increased height to accommodate title
-TITLE_HEIGHT = 60
+TITLE_HEIGHT = 80  # Increased to accommodate score
+SCORE_FONT_SIZE = 24  # New smaller font size for score
 GAME_AREA_TOP = TITLE_HEIGHT + 20
 TITLE_FONT_SIZE = 48
 MESSAGE_AREA_HEIGHT = 80

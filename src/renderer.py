@@ -10,6 +10,7 @@ class GameRenderer:
         pygame.display.set_caption("2048")
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE)
         self.title_font = pygame.font.SysFont(FONT_NAME, TITLE_FONT_SIZE, bold=True)
+        self.score_font = pygame.font.SysFont(FONT_NAME, SCORE_FONT_SIZE)
         self.message_font = pygame.font.SysFont(FONT_NAME, int(FONT_SIZE * 1.5))  # Slightly smaller messages
         self.close_button_size = 20
         self.close_button_padding = 5
@@ -44,9 +45,10 @@ class GameRenderer:
                     text_rect = text.get_rect(center=cell_rect.center)
                     self.screen.blit(text, text_rect)
         
-        # Draw score
-        score_text = self.font.render(f"Score: {game.score}", True, pygame.Color(TEXT_COLORS['default']))
-        self.screen.blit(score_text, (10, WINDOW_HEIGHT - 40))
+        # Draw score below title
+        score_text = self.score_font.render(f"Score: {game.score}", True, pygame.Color(TEXT_COLORS['default']))
+        score_rect = score_text.get_rect(x=10, top=TITLE_HEIGHT - 30)
+        self.screen.blit(score_text, score_rect)
         
         # Draw message if exists
         if game.current_message:

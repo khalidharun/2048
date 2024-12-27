@@ -30,15 +30,12 @@ def main():
                         if any(16 in row for row in game.matrix) and not game.has_shown_16:
                             game.has_shown_16 = True
                             game.current_message = "Achievement! You've reached 16!"
-                            game.message_timer = current_time
                         
                         if game.check_win():
                             game.current_message = "Congratulations! You've won!"
-                            game.message_timer = current_time
                         
                         if game.is_game_over():
                             game.current_message = f"Game Over! Final Score: {game.score}"
-                            game.message_timer = current_time
         
         renderer.draw_game(game)
         clock.tick(60)
