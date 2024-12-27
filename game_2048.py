@@ -12,6 +12,7 @@ class Game2048:
         self.score = 0
         self.game_over = False
         self.won = False
+        self.has_shown_16 = False
         self.init_grid()
         self.init_matrix()
         self.bind_keys()
@@ -63,6 +64,9 @@ class Game2048:
                         bg=self.get_cell_color(new_number),
                         fg=self.get_text_color(new_number)
                     )
+                    if new_number == 16 and not self.has_shown_16:
+                        messagebox.showinfo("Achievement!", "Congratulations! You've reached 16!")
+                        self.has_shown_16 = True
         self.window.update_idletasks()
 
     def stack(self) -> None:
