@@ -10,7 +10,7 @@ class GameRenderer:
         pygame.display.set_caption("2048")
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE)
         self.title_font = pygame.font.SysFont(FONT_NAME, TITLE_FONT_SIZE, bold=True)
-        self.message_font = pygame.font.SysFont(FONT_NAME, FONT_SIZE * 1.5)  # Slightly smaller messages
+        self.message_font = pygame.font.SysFont(FONT_NAME, int(FONT_SIZE * 1.5))  # Slightly smaller messages
         
     def draw_game(self, game: Game2048):
         self.screen.fill(pygame.Color(COLORS['background']))
