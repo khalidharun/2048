@@ -63,7 +63,6 @@ class Game2048:
         self.stack()
         if self.matrix != old_matrix:
             self.add_new_tile()
-        self.update_grid_cells()
         if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
 
@@ -76,7 +75,6 @@ class Game2048:
         self.reverse()
         if self.matrix != old_matrix:
             self.add_new_tile()
-        self.update_grid_cells()
         if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
 
@@ -89,7 +87,6 @@ class Game2048:
         self.transpose()
         if self.matrix != old_matrix:
             self.add_new_tile()
-        self.update_grid_cells()
         if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
 
@@ -104,7 +101,6 @@ class Game2048:
         self.transpose()
         if self.matrix != old_matrix:
             self.add_new_tile()
-        self.update_grid_cells()
         if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
 
@@ -151,4 +147,3 @@ class Game2048:
 
 if __name__ == '__main__':
     game = Game2048()
-    game.window.mainloop()
