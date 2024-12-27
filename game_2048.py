@@ -128,14 +128,34 @@ class Game2048:
             messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def move_up(self) -> None:
+        old_matrix = [row[:] for row in self.matrix]
         self.transpose()
-        self.move_left()
+        self.stack()
+        self.combine()
+        self.stack()
         self.transpose()
+        if self.matrix != old_matrix:
+            self.add_new_tile()
+        self.update_grid_cells()
+        if not self.has_valid_moves() and not self.game_over:
+            self.game_over = True
+            messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def move_down(self) -> None:
+        old_matrix = [row[:] for row in self.matrix]
         self.transpose()
-        self.move_right()
+        self.reverse()
+        self.stack()
+        self.combine()
+        self.stack()
+        self.reverse()
         self.transpose()
+        if self.matrix != old_matrix:
+            self.add_new_tile()
+        self.update_grid_cells()
+        if not self.has_valid_moves() and not self.game_over:
+            self.game_over = True
+            messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def bind_keys(self) -> None:
         self.window.bind('<Left>', lambda event: self.move_left())
