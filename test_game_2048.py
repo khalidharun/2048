@@ -155,7 +155,7 @@ def test_directional_movement(game):
         [0, 0, 32, 32]
     ]
     game.move_right()
-    assert_matrix_equal(game.matrix, expected_right, "Complex right movement failed")
+    assert_movement_correct(game.matrix, expected_right, "Complex right movement failed")
 
     # Test no movement when already aligned
     game.matrix = [
@@ -166,7 +166,7 @@ def test_directional_movement(game):
     ]
     expected_no_change = [row[:] for row in game.matrix]
     game.move_right()
-    assert_matrix_equal(game.matrix, expected_no_change, "Unnecessary movement occurred")
+    assert_movement_correct(game.matrix, expected_no_change, "Unnecessary movement occurred")
 
 def test_movement_edge_cases(game):
     """Test edge cases in movement mechanics"""
