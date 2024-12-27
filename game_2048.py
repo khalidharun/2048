@@ -40,7 +40,6 @@ class Game2048:
                     self.matrix[i][j + 1] = 0
                     if self.matrix[i][j] == 2048 and not self.won:
                         self.won = True
-                        messagebox.showinfo("Congratulations!", "You've won! You can continue playing to achieve a higher score.")
 
     def reverse(self) -> None:
         new_matrix = []
@@ -67,7 +66,6 @@ class Game2048:
         self.update_grid_cells()
         if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
-            messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def move_right(self) -> None:
         old_matrix = [row[:] for row in self.matrix]
@@ -81,7 +79,6 @@ class Game2048:
         self.update_grid_cells()
         if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
-            messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def move_up(self) -> None:
         old_matrix = [row[:] for row in self.matrix]
@@ -95,7 +92,6 @@ class Game2048:
         self.update_grid_cells()
         if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
-            messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def move_down(self) -> None:
         old_matrix = [row[:] for row in self.matrix]
@@ -111,7 +107,6 @@ class Game2048:
         self.update_grid_cells()
         if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
-            messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def handle_input(self, event_key: str) -> bool:
         """Returns True if the move was valid and changed the board"""
