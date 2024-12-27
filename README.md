@@ -1,10 +1,10 @@
 # 2048 Game
 
-A Python implementation of the popular 2048 puzzle game using Tkinter for the graphical interface.
+A Python implementation of the popular 2048 puzzle game using Pygame for the graphical interface.
 
 ## Description
 
-2048 is a single-player sliding tile puzzle game. The game's objective is to slide numbered tiles on a grid to combine them and create a tile with the number 2048.
+2048 is a single-player sliding tile puzzle game. The game's objective is to slide numbered tiles on a grid to combine them and create a tile with the number 2048. This implementation uses Pygame for smooth graphics and responsive controls.
 
 ## Game Mechanics
 
@@ -43,19 +43,35 @@ A move is considered valid if at least one of these conditions is met:
 git clone [repository-url]
 
 # Install required dependencies
-pip install pytest
+pip install -r requirements.txt
+```
+
+## Project Structure
+
+```
+2048/
+├── README.md
+├── requirements.txt
+├── src/
+│   ├── __init__.py
+│   ├── game.py          # Core game logic
+│   ├── renderer.py      # Pygame rendering
+│   ├── constants.py     # Game constants/colors
+│   └── main.py         # Entry point
+└── tests/
+    └── test_game.py    # Tests
 ```
 
 ## Running the Game
 
 ```bash
-python game_2048.py
+python -m src.main
 ```
 
 ## Running Tests
 
 ```bash
-pytest test_game_2048.py -v
+pytest tests/test_game.py -v
 ```
 
 ## Controls
