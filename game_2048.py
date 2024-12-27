@@ -8,6 +8,9 @@ class Game2048:
         self.window.title("2048")
         self.grid_cells: List[List[tk.Label]] = []
         self.matrix: List[List[int]] = []
+        self.score = 0
+        self.game_over = False
+        self.won = False
         self.init_grid()
         self.init_matrix()
         self.bind_keys()
@@ -76,7 +79,10 @@ class Game2048:
             for j in range(3):
                 if self.matrix[i][j] != 0 and self.matrix[i][j] == self.matrix[i][j + 1]:
                     self.matrix[i][j] *= 2
+                    self.score += self.matrix[i][j]
                     self.matrix[i][j + 1] = 0
+                    if self.matrix[i][j] == 2048:
+                        self.won = True
 
     def reverse(self) -> None:
         new_matrix = []
@@ -94,11 +100,15 @@ class Game2048:
         self.matrix = new_matrix
 
     def move_left(self) -> None:
+        old_matrix = [row[:] for row in self.matrix]
         self.stack()
         self.combine()
         self.stack()
-        self.add_new_tile()
+        if self.matrix != old_matrix:
+            self.add_new_tile()
         self.update_grid_cells()
+        if not self.has_valid_moves():
+            self.game_over = True
 
     def move_right(self) -> None:
         self.reverse()
@@ -142,6 +152,32 @@ class Game2048:
     @staticmethod
     def get_text_color(number: int) -> str:
         return '#776e65' if number <= 4 else '#f9f6f2'
+
+    def has_valid_moves(self) -> bool:
+        """Check if any valid moves remain"""
+        # Check for empty cells
+        if any(0 in row for row in self.matrix):
+            return True
+            
+        # Check for possible merges
+        for i in range(4):
+            for j in range(4):
+                current = self.matrix[i][j]
+                # Check right neighbor
+                if j < 3 and current == self.matrix[i][j + 1]:
+                    return True
+                # Check bottom neighbor
+                if i < 3 and current == self.matrix[i + 1][j]:
+                    return True
+        return False
+
+    def is_game_over(self) -> bool:
+        """Check if the game is over"""
+        return not self.has_valid_moves()
+
+    def check_win(self) -> bool:
+        """Check if the player has won"""
+        return self.won
 
 if __name__ == '__main__':
     game = Game2048()
