@@ -9,9 +9,10 @@ A Python implementation of the popular 2048 puzzle game using Tkinter for the gr
 ## Game Mechanics
 
 ### Starting Conditions
-- The game begins with a 4x4 grid
-- Two tiles are randomly placed on the grid
+- The game begins with a 4x4 grid (16 cells)
+- Exactly two random cells start with tiles
 - Each starting tile has a value of either 2 (90% probability) or 4 (10% probability)
+- The remaining 14 cells start empty
 
 ### Gameplay Rules
 1. **Movement**: Players can slide tiles in four directions (up, down, left, right) using arrow keys
