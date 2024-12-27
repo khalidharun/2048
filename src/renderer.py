@@ -11,6 +11,8 @@ class GameRenderer:
         self.font = pygame.font.SysFont(FONT_NAME, FONT_SIZE)
         self.title_font = pygame.font.SysFont(FONT_NAME, TITLE_FONT_SIZE, bold=True)
         self.message_font = pygame.font.SysFont(FONT_NAME, int(FONT_SIZE * 1.5))  # Slightly smaller messages
+        self.close_button_size = 20
+        self.close_button_padding = 5
         
     def draw_game(self, game: Game2048):
         self.screen.fill(pygame.Color(COLORS['background']))
@@ -55,9 +57,28 @@ class GameRenderer:
             message_y = GAME_AREA_TOP + (WINDOW_SIZE - MESSAGE_AREA_HEIGHT) // 2
             self.screen.blit(message_area, (0, message_y))
             
+            # Draw close button
+            close_x = WINDOW_SIZE - self.close_button_size - self.close_button_padding
+            close_y = message_y + self.close_button_padding
+            game.close_button_rect = self.draw_close_button(close_x, close_y)
+            
             # Message text
             message_text = self.message_font.render(game.current_message, True, pygame.Color(TEXT_COLORS['default']))
             message_rect = message_text.get_rect(center=(WINDOW_SIZE // 2, message_y + MESSAGE_AREA_HEIGHT // 2))
             self.screen.blit(message_text, message_rect)
         
         pygame.display.flip()
+        
+    def draw_close_button(self, x, y):
+        """Draw an X close button"""
+        button_rect = Rect(x, y, self.close_button_size, self.close_button_size)
+        pygame.draw.rect(self.screen, pygame.Color('darkgray'), button_rect)
+        
+        # Draw X
+        x_color = pygame.Color('white')
+        start_x, start_y = x + 5, y + 5
+        size = self.close_button_size - 10
+        pygame.draw.line(self.screen, x_color, (start_x, start_y), (start_x + size, start_y + size), 2)
+        pygame.draw.line(self.screen, x_color, (start_x + size, start_y), (start_x, start_y + size), 2)
+        
+        return button_rect

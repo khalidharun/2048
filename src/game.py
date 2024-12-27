@@ -9,7 +9,7 @@ class Game2048:
         self.won = False
         self.has_shown_16 = False
         self.current_message = None  # Track current message
-        self.message_timer = 0  # Control message duration
+        self.close_button_rect = None  # Store the close button rectangle
         self.init_game()
 
     def init_game(self):
@@ -146,6 +146,13 @@ class Game2048:
     def check_win(self) -> bool:
         """Check if the player has won"""
         return self.won
+        
+    def handle_message_click(self, pos) -> bool:
+        """Handle clicks on the message area. Returns True if message was dismissed."""
+        if self.current_message and self.close_button_rect and self.close_button_rect.collidepoint(pos):
+            self.current_message = None
+            return True
+        return False
 
 if __name__ == '__main__':
     game = Game2048()

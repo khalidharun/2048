@@ -10,15 +10,12 @@ def main():
     running = True
     
     while running:
-        current_time = pygame.time.get_ticks()
-        
-        # Clear message after 2 seconds
-        if game.current_message and current_time - game.message_timer > 2000:
-            game.current_message = None
-        
         for event in pygame.event.get():
             if event.type == QUIT:
                 running = False
+            elif event.type == MOUSEBUTTONDOWN:
+                if event.button == 1:  # Left click
+                    game.handle_message_click(event.pos)
             elif event.type == KEYDOWN:
                 key_map = {
                     K_LEFT: 'LEFT',
