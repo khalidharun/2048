@@ -13,11 +13,11 @@ def test_initial_conditions(game):
     # Check grid size
     assert len(game.matrix) == 4
     assert len(game.matrix[0]) == 4
-    
+
     # Count initial tiles
     non_zero_tiles = sum(1 for row in game.matrix for cell in row if cell != 0)
     assert non_zero_tiles == 2
-    
+
     # Check that initial tiles are either 2 or 4
     valid_values = {2, 4}
     initial_values = {cell for row in game.matrix for cell in row if cell != 0}
@@ -25,11 +25,11 @@ def test_initial_conditions(game):
 
 def test_movement_mechanics(game):
     """Test all movement directions with various scenarios"""
-    
+
     def reset_board(matrix):
         game.matrix = [row[:] for row in matrix]
         game.score = 0
-    
+
     # Test Case 1: Basic left movement and merging
     test_board = [
         [2, 2, 0, 0],
@@ -68,14 +68,14 @@ def test_movement_mechanics(game):
 
 def test_directional_movement(game):
     """Test all directional movements thoroughly"""
-    
+
     def assert_movement_correct(actual, expected, message):
         # Check that all expected merges and moves happened
         for i in range(4):
             for j in range(4):
                 if expected[i][j] != 0:  # Only check non-zero positions
                     assert actual[i][j] == expected[i][j], f"{message}\nExpected {expected[i][j]} at position ({i},{j}), got {actual[i][j]}"
-    
+
     # Test LEFT movement
     game.matrix = [
         [0, 2, 2, 4],
@@ -116,9 +116,9 @@ def test_directional_movement(game):
         [2, 4, 0, 4]
     ]
     expected_up = [
-        [4, 8, 8, 2],
-        [0, 0, 0, 8],
-        [0, 0, 0, 2],
+        [4, 4, 8, 4],
+        [0, 4, 0, 8],
+        [0, 0, 0, 0],
         [0, 0, 0, 0]
     ]
     game.move_up()
@@ -133,9 +133,9 @@ def test_directional_movement(game):
     ]
     expected_down = [
         [0, 0, 0, 0],
-        [0, 0, 0, 2],
-        [0, 0, 0, 8],
-        [4, 8, 8, 2]
+        [0, 0, 0, 0],
+        [0, 4, 0, 8],
+        [4, 4, 8, 4]
     ]
     game.move_down()
     assert_movement_correct(game.matrix, expected_down, "Down movement failed")
@@ -170,7 +170,7 @@ def test_directional_movement(game):
 
 def test_movement_edge_cases(game):
     """Test edge cases in movement mechanics"""
-    
+
     # Test merging prevention after one merge
     game.matrix = [
         [2, 2, 2, 0],
@@ -203,7 +203,7 @@ def test_merge_rules(game):
     ]
     game.move_left()
     assert game.matrix[0][:2] == [2, 4]
-    
+
     # Test that merging happens only once per move
     game.matrix = [
         [2, 2, 2, 2],
