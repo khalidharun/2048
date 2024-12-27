@@ -24,18 +24,106 @@ def test_initial_conditions(game):
     assert initial_values.issubset(valid_values)
 
 def test_movement_mechanics(game):
-    """Test basic movement mechanics"""
-    # Set up a known board state
-    game.matrix = [
-        [2, 0, 0, 0],
-        [2, 0, 0, 0],
+    """Test all movement directions with various scenarios"""
+    
+    def reset_board(matrix):
+        game.matrix = [row[:] for row in matrix]
+        game.score = 0
+    
+    # Test Case 1: Basic left movement and merging
+    test_board = [
+        [2, 2, 0, 0],
+        [0, 0, 0, 0],
         [0, 0, 0, 0],
         [0, 0, 0, 0]
     ]
+    reset_board(test_board)
+    game.move_left()
+    assert game.matrix[0][0] == 4, "Failed to merge tiles moving left"
+    assert game.score == 4, "Score not updated correctly after merge"
+
+    # Test Case 2: Multiple merges in one move
+    test_board = [
+        [2, 2, 2, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ]
+    reset_board(test_board)
+    game.move_left()
+    assert game.matrix[0][:2] == [4, 4], "Failed to properly merge multiple pairs"
+    assert game.score == 8, "Score not updated correctly after multiple merges"
+
+    # Test Case 3: No valid moves
+    test_board = [
+        [2, 4, 2, 4],
+        [4, 2, 4, 2],
+        [2, 4, 2, 4],
+        [4, 2, 4, 2]
+    ]
+    reset_board(test_board)
+    original = [row[:] for row in test_board]
+    game.move_left()
+    assert game.matrix == original, "Board changed when no valid moves possible"
+
+def test_directional_movement(game):
+    """Test specific behaviors for each direction"""
     
-    # Test moving up (should combine the 2s)
+    # Test up movement
+    game.matrix = [
+        [0, 0, 0, 0],
+        [2, 0, 0, 0],
+        [2, 0, 0, 0],
+        [4, 0, 0, 0]
+    ]
     game.move_up()
-    assert game.matrix[0][0] == 4
+    assert game.matrix[0][0] == 4, "Up movement failed to merge"
+    assert game.matrix[1][0] == 4, "Up movement failed to stack"
+
+    # Test down movement
+    game.matrix = [
+        [2, 0, 0, 0],
+        [2, 0, 0, 0],
+        [4, 0, 0, 0],
+        [0, 0, 0, 0]
+    ]
+    game.move_down()
+    assert game.matrix[3][0] == 4, "Down movement failed to merge"
+    assert game.matrix[2][0] == 4, "Down movement failed to stack"
+
+    # Test right movement with blocking
+    game.matrix = [
+        [2, 2, 2, 2],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ]
+    game.move_right()
+    assert game.matrix[0][2:] == [4, 4], "Right movement failed to merge correctly"
+
+def test_movement_edge_cases(game):
+    """Test edge cases in movement mechanics"""
+    
+    # Test merging prevention after one merge
+    game.matrix = [
+        [2, 2, 2, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ]
+    game.move_left()
+    assert game.matrix[0][:2] == [4, 2], "Multiple merges occurred in single move"
+
+    # Test preservation of unmergeable sequences
+    game.matrix = [
+        [2, 4, 2, 4],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0],
+        [0, 0, 0, 0]
+    ]
+    original_first_row = game.matrix[0][:]
+    game.move_left()
+    assert game.matrix[0][:4] == original_first_row, "Unmergeable sequence was modified"
 
 def test_merge_rules(game):
     """Test tile merging rules"""
