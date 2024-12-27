@@ -1,4 +1,5 @@
 import tkinter as tk
+from tkinter import messagebox
 import random
 from typing import List, Optional
 
@@ -81,8 +82,9 @@ class Game2048:
                     self.matrix[i][j] *= 2
                     self.score += self.matrix[i][j]
                     self.matrix[i][j + 1] = 0
-                    if self.matrix[i][j] == 2048:
+                    if self.matrix[i][j] == 2048 and not self.won:
                         self.won = True
+                        messagebox.showinfo("Congratulations!", "You've won! You can continue playing to achieve a higher score.")
 
     def reverse(self) -> None:
         new_matrix = []
@@ -107,8 +109,9 @@ class Game2048:
         if self.matrix != old_matrix:
             self.add_new_tile()
         self.update_grid_cells()
-        if not self.has_valid_moves():
+        if not self.has_valid_moves() and not self.game_over:
             self.game_over = True
+            messagebox.showinfo("Game Over!", f"No more moves available.\nFinal Score: {self.score}")
 
     def move_right(self) -> None:
         self.reverse()
