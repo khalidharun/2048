@@ -192,3 +192,73 @@ def test_score_tracking(game):
     initial_score = game.score
     game.move_left()
     assert game.score == initial_score + 4
+
+def test_stack_method(game):
+    """Test the stack method"""
+    game.matrix = [
+        [0, 2, 0, 4],
+        [0, 0, 0, 2],
+        [0, 0, 2, 0],
+        [2, 0, 0, 0]
+    ]
+    game.stack()
+    expected = [
+        [2, 4, 0, 0],
+        [2, 0, 0, 0],
+        [2, 0, 0, 0],
+        [2, 0, 0, 0]
+    ]
+    assert game.matrix == expected, "Stack method failed to move numbers correctly"
+
+def test_combine_method(game):
+    """Test the combine method"""
+    game.matrix = [
+        [2, 2, 4, 4],
+        [2, 2, 2, 2],
+        [4, 4, 0, 0],
+        [2, 0, 0, 0]
+    ]
+    initial_score = game.score
+    game.combine()
+    expected = [
+        [4, 0, 8, 0],
+        [4, 0, 4, 0],
+        [8, 0, 0, 0],
+        [2, 0, 0, 0]
+    ]
+    assert game.matrix == expected, "Combine method failed to merge numbers correctly"
+    assert game.score == initial_score + 28, "Score not updated correctly after combines"
+
+def test_reverse_method(game):
+    """Test the reverse method"""
+    game.matrix = [
+        [2, 0, 0, 4],
+        [0, 2, 4, 0],
+        [0, 0, 2, 0],
+        [4, 2, 0, 2]
+    ]
+    expected = [
+        [4, 0, 0, 2],
+        [0, 4, 2, 0],
+        [0, 2, 0, 0],
+        [2, 0, 2, 4]
+    ]
+    game.reverse()
+    assert game.matrix == expected, "Reverse method failed to reverse rows correctly"
+
+def test_transpose_method(game):
+    """Test the transpose method"""
+    game.matrix = [
+        [2, 0, 0, 4],
+        [0, 2, 4, 0],
+        [0, 0, 2, 0],
+        [4, 2, 0, 2]
+    ]
+    expected = [
+        [2, 0, 0, 4],
+        [0, 2, 0, 2],
+        [0, 4, 2, 0],
+        [4, 0, 0, 2]
+    ]
+    game.transpose()
+    assert game.matrix == expected, "Transpose method failed to transpose matrix correctly"
